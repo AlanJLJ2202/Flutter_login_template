@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 part 'navigator_event.dart';
 part 'navigator_state.dart';
 
-class NavigatorBloc extends Bloc<NavigatorEvent, NavigatorState>{
+class NavigatorBloc extends Bloc<NavigatorEvent, NavigatorxState>{
 
   NavigatorBloc() : super(LoadingState()){
 
@@ -12,13 +12,13 @@ class NavigatorBloc extends Bloc<NavigatorEvent, NavigatorState>{
       emit(LoadingState());
     });
 
-    on<GoLogin>((event, emit) {
+    /*on<GoLogin>((event, emit) {
       emit(LoginState());
     });
 
     on<GoRegister>((event, emit) {
       emit(RegisterState());
-    });
+    });*/
 
     on<GoHome>((event, emit) {
       emit(HomeState());

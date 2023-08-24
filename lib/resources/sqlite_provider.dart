@@ -1,72 +1,59 @@
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' as io;
-import 'dart:io';
 import 'package:path/path.dart';
+
+import '../models/user.dart';
 
 
 class SQLiteProvider {
-
   createDatabase(Database db , int version) async{
-    await db.execute("CREATE TABLE user(id INTEGER PRIMARY KEY, access_token TEXT NULL, tipo TEXT NULL, empresa_id INTEGER NULL, admin INTEGER NULL)");
+    await db.execute(
+        "CREATE TABLE user("
+        "id INTEGER PRIMARY KEY,"
+        "name TEXT,"
+        "email TEXT,"
+        "balance TEXT,"
+        "remember_token TEXT)");
   }
 
   initDatabase() async{
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "corvuz_talentex.db");
-    //await deleteDatabase(path);
+    String path = join(documentsDirectory.path, "t_app.db");
     return await openDatabase(path, version: 1, onCreate: createDatabase);
   }
 
-  Future<Database> initDB() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "MyDatabase.db");
-    return await openDatabase(path, version: 1, onOpen: (db) {},
-        onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE User ("
-          "id INTEGER PRIMARY KEY,"
-          "name TEXT,"
-          "email TEXT,"
-          "password TEXT"
-          ")");
-    });
+  closeDatabase(Database db) async{
+    await db.close();
   }
 
-  Future<int> insertUser(User user) async {
-    final db = await database;
-    var res = await db.insert("User", user.toJson());
-    return res;
-  }
-
-  Future<User> getUser(int id) async {
-    final db = await database;
-    var res = await db.query("User", where: "id = ?", whereArgs: [id]);
+  Future<User?> getInternalUser() async {
+    Database db = await initDatabase();
+    var res = await db.query("user");
     return res.isNotEmpty ? User.fromJson(res.first) : null;
   }
 
-  Future<List<User>> getAllUsers() async {
-    final db = await database;
-    var res = await db.query("User");
-    List<User> list =
-        res.isNotEmpty ? res.map((c) => User.fromJson(c)).toList() : [];
-    return list;
+  Future<bool> hasInternalToken() async {
+    Database db = await initDatabase();
+    var res = await db.query("user");
+    return res.isNotEmpty;
   }
 
-  Future<int> updateUser(User user) async {
-    final db = await database;
-    var res = await db.update("User", user.toJson(),
-        where: "id = ?", whereArgs: [user.id]);
-    return res;
+  Future<void> deleteInternalUser() async {
+    Database db = await initDatabase();
+    await db.delete("user");
   }
 
-  Future<int> deleteUser(int id) async {
-    final db = await database;
-    var res = await db.delete("User", where: "id = ?", whereArgs: [id]);
-    return res;
+  Future<void> saveInternalUser(User user) async {
+    Database db = await initDatabase();
+    await db.delete("user");
+    await db.insert("user", user.toJson());
   }
 
-  Future deleteAllUsers() async {
-    final db = await database;
-    db.delete("User");
+  Future<User?> updateInternalUser(User user) async {
+    Database db = await initDatabase();
+    await db.update("user", user.toJson(), where: "id = ?", whereArgs: [user.id]);
+    var res = await db.query("user");
+    return res.isNotEmpty ? User.fromJson(res.first) : null;
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/authentication/authentication_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
 
@@ -30,6 +33,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    obscureText: true,
                     controller: _passwordController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -39,7 +43,10 @@ class LoginScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-
+                    BlocProvider.of<AuthenticationBloc>(context).add(LoginEvent(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    ));
                   },
                   child: const Text('Login'),
                 ),

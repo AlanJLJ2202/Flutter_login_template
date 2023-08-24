@@ -11,6 +11,8 @@ class LoadAuthentication extends AuthenticationEvent {}
 
 class AppStarted extends AuthenticationEvent {}
 
+class LoginTapEvent extends AuthenticationEvent {}
+
 class LoginEvent extends AuthenticationEvent {
   final String email;
   final String password;
@@ -20,6 +22,8 @@ class LoginEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+class RegisterTapEvent extends AuthenticationEvent {}
 
 class RegisterEvent extends AuthenticationEvent {
   final String name;

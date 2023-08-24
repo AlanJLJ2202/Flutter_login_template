@@ -1,24 +1,18 @@
 part of 'navigator_bloc.dart';
 
 
-abstract class NavigatorState extends Equatable {
-  const NavigatorState();
+abstract class NavigatorxState extends Equatable {
+  const NavigatorxState();
   @override
   List<Object> get props => [];
 }
 
-class UnauthenticatedState extends NavigatorState {}
+class LoadingState extends NavigatorxState {}
 
-class LoadingState extends NavigatorState {}
+class HomeState extends NavigatorxState {}
 
-class RegisterState extends NavigatorState {}
+class AddTransactionState extends NavigatorxState {}
 
-class LoginState extends NavigatorState {}
+class AddCategoryState extends NavigatorxState {}
 
-class HomeState extends NavigatorState {}
-
-class AddTransactionState extends NavigatorState {}
-
-class AddCategoryState extends NavigatorState {}
-
-class ProfileState extends NavigatorState {}
+class ProfileState extends NavigatorxState {}
